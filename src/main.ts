@@ -8,6 +8,9 @@ const listenPort = 3000;
 const logger = new Logger('main.ts');
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
+  /**
+   * 接口文档
+   */
   const config = new DocumentBuilder()
     .setTitle('接口文档')
     .setDescription('项目管理平台')
@@ -15,7 +18,11 @@ const bootstrap = async () => {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+  /**
+   * 使用log4框架打印日志
+   */
   app.useLogger(app.get(Log4jsLogger));
+
   await app.listen(listenPort);
 };
 bootstrap().then(() => {
