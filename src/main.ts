@@ -14,6 +14,10 @@ const bootstrap = async () => {
   const config = new DocumentBuilder()
     .setTitle('接口文档')
     .setDescription('项目管理平台')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'jwt',
+    )
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);

@@ -6,8 +6,10 @@ export class HashPasswordMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: () => void) {
     let userPassword = req.body['password'];
     if (userPassword) {
-      userPassword = encrypt(userPassword, addSalt());
+      const salt = addSalt();
+      userPassword = encrypt(userPassword, salt);
       req.body['password'] = userPassword;
+      req.body['salt'] = salt;
     }
     next();
   }

@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { Log4jsModule } from '@nestx-log4js/core';
 import { DbModule } from './db/db.module';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [Log4jsModule.forRoot(), DbModule, UserModule],
+  imports: [Log4jsModule.forRoot(), DbModule, UserModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -1,23 +1,26 @@
-import { Controller, Get, Body, Post } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './entities/user.entity';
 
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Role } from '../role/role.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 @ApiTags('用户模块')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth('jwt')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Post('register')
-  @ApiOperation({
-    summary: '用户进行注册',
-  })
-  async register(@Body() user: User) {
-    return await this.userService.register(user);
-  }
 
-  @Get()
+  @Get('all')
   async getFindAll() {
     return await this.userService.findAll();
+  }
+
+  //   装饰器
+  @Get('hello')
+  @Role('admin')
+  hello() {
+    return 'hello';
   }
 }
