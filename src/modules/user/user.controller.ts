@@ -1,13 +1,13 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Role } from '../role/role.decorator';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 @ApiTags('用户模块')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 @ApiBearerAuth('jwt')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -21,6 +21,6 @@ export class UserController {
   @Get('hello')
   @Role('admin')
   hello() {
-    return 'hello';
+    return '123';
   }
 }

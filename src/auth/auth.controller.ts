@@ -22,4 +22,12 @@ export class AuthController {
   async register(@Body() user: User) {
     return await this.authService.register(user);
   }
+
+  @Post('alter')
+  @ApiOperation({
+    summary: '用户修改接口',
+  })
+  async alter(@Body() userDto: User) {
+    return this.authService.alter(userDto);
+  }
 }

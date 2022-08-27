@@ -130,4 +130,55 @@ export class AuthService {
       }
     }
   }
+
+  async alter(user: User) {
+    // 首先查寻有没有该用户
+    const password: string = user.password;
+    const phone: string = user.phone;
+    return await this.userService
+      .findOneByPhone(phone)
+      .then((res) => {
+        if (!res) {
+          this.response = {
+            code: 3,
+            msg: '改手机号暂未注册',
+          };
+          throw this.response;
+        }
+        return res;
+      })
+      .then((dbUser: User) => {
+        const pass = encrypt(password, dbUser.salt);
+        if (pass === dbUser.password) {
+          return (this.response = {
+            code: 0,
+            msg: '修改成功',
+          });
+        } else {
+          return (this.response = {
+            code: 0,
+            msg: '用户密码不正确',
+          });
+        }
+      });
+    // await this.userService.findOneByPassword(user.password);
+    // await this.userModel
+    //   .update(
+    //     { phone: user.phone },
+    //     {
+    //       where: {
+    //         phone: user.phone,
+    //       },
+    //     },
+    //   )
+    //   .then(() => {
+    //     logger.log(`用户${user.phone}修改成功`);
+    //   })
+    //   .then(() => {
+    //     return (this.response = {
+    //       code: 0,
+    //       msg: '修改成功',
+    //     });
+    //   });
+  }
 }

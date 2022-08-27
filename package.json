@@ -32,6 +32,7 @@
     "@nestx-log4js/core": "^1.5.1",
     "crypto": "^1.0.1",
     "mysql2": "^2.3.3",
+    "nestjs-redis": "^1.3.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
