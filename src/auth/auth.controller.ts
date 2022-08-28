@@ -27,7 +27,7 @@ export class AuthController {
   @ApiOperation({
     summary: '用户修改接口',
   })
-  async alter(@Body() userDto: User) {
-    return this.authService.alter(userDto);
+  async alter(@Body() user: User) {
+    return await this.authService.alter(user);
   }
 }

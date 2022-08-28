@@ -32,6 +32,10 @@ import { JwtStrategy } from './jwt.strategy';
 export class AuthModule implements NestModule {
   // 使用中间件进行密码加密
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(HashPasswordMiddleware).forRoutes('auth/register');
+    consumer
+      .apply(HashPasswordMiddleware)
+      .forRoutes('auth/register')
+      .apply(HashPasswordMiddleware)
+      .forRoutes('auth/alter');
   }
 }

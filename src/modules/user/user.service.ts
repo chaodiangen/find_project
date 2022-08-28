@@ -37,7 +37,7 @@ export class UserService {
     });
   }
   /**
-   * 通过手机号查询用户
+   * 通过密码查询用户
    */
   async findOneByPassword(password: string): Promise<User> {
     return this.userModel.findOne({
