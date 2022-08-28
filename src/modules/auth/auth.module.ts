@@ -36,6 +36,6 @@ export class AuthModule implements NestModule {
       .apply(HashPasswordMiddleware)
       .forRoutes('auth/register')
       .apply(HashPasswordMiddleware)
-      .forRoutes('auth/alter');
+      .forRoutes('auth/update');
   }
 }

@@ -1,6 +1,14 @@
 import { Module } from '@nestjs/common';
-import { User } from 'src/modules/user/entities/user.entity';
 import { SequelizeModule } from '@nestjs/sequelize';
+import * as models from './index';
+// 导入所有模型
+const allModels = [];
+for (const key in models) {
+  if (Object.prototype.hasOwnProperty.call(models, key)) {
+    const element = models[key];
+    allModels.push(element);
+  }
+}
 
 @Module({
   imports: [
@@ -11,7 +19,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
       username: 'root',
       password: '123456',
       database: 'nest_export',
-      models: [User],
+      models: allModels,
     }),
   ],
 })

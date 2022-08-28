@@ -4,10 +4,17 @@ import { AppService } from './app.service';
 import { Log4jsModule } from '@nestx-log4js/core';
 import { DbModule } from './db/db.module';
 import { UserModule } from './modules/user/user.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { ProjectModule } from './modules/project/project.module';
 
 @Module({
-  imports: [Log4jsModule.forRoot(), DbModule, UserModule, AuthModule],
+  imports: [
+    Log4jsModule.forRoot(),
+    DbModule,
+    UserModule,
+    AuthModule,
+    ProjectModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -10,10 +10,19 @@ export class UserService {
     private readonly userModel: typeof User,
   ) {}
 
+  /**
+   * 获取用户
+   * @returns
+   */
   async findAll(): Promise<User[]> {
     return this.userModel.findAll();
   }
 
+  /**
+   * 根据id查找项目
+   * @param id
+   * @returns
+   */
   async findOneById(id: string): Promise<User> {
     return this.userModel.findOne({
       where: {
@@ -22,12 +31,18 @@ export class UserService {
     });
   }
 
+  /**
+   * 删除用户
+   * @param id
+   */
   async remove(id: string): Promise<void> {
     const user = await this.findOneById(id);
     await user.destroy();
   }
   /**
    * 通过手机号查询用户
+   * @param phone
+   * @returns
    */
   async findOneByPhone(phone: string): Promise<User> {
     return this.userModel.findOne({
@@ -36,8 +51,11 @@ export class UserService {
       },
     });
   }
+
   /**
    * 通过密码查询用户
+   * @param password
+   * @returns
    */
   async findOneByPassword(password: string): Promise<User> {
     return this.userModel.findOne({
