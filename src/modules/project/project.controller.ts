@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
@@ -45,8 +52,8 @@ export class ProjectController {
   @ApiOperation({
     summary: '查找项目',
   })
-  async searcgNameProject(@Body() body: ProjectPagination) {
-    return await this.projectService.searcgNameProject(
+  async searchNameProject(@Body() body: ProjectPagination) {
+    return await this.projectService.searchNameProject(
       body.pageNum,
       body.pageSize,
       body.name,

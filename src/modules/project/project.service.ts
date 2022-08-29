@@ -96,8 +96,7 @@ export class ProjectService {
    * @param project
    * @returns
    */
-  async searcgNameProject(pageNum: number, pageSize: number, name: string) {
-    console.log(pageNum, pageSize, name);
+  async searchNameProject(pageNum: number, pageSize: number, name: string) {
     try {
       const { count, rows } = await this.projectModel.findAndCountAll({
         offset: Number(pageNum) - 1, // 查询的起始下标
@@ -110,12 +109,12 @@ export class ProjectService {
         code: 0,
         data: {
           data: rows,
-          tottal: count,
+          total: count,
         },
       });
     } catch (error) {
       return (this.response = {
-        code: 0,
+        code: 1,
         data: '查找失败',
       });
     }
