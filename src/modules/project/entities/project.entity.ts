@@ -20,7 +20,7 @@ export class Project extends Model<Project> {
   readonly description: string;
   @ApiProperty({
     type: String,
-    example: 'admin',
+    example: '1',
     description: '创建者',
   })
   @Column

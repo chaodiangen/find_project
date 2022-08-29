@@ -1,16 +1,28 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { Column, Model, Table } from 'sequelize-typescript';
 
-@Entity()
-export class Project {
-  @PrimaryGeneratedColumn()
-  id: number;
+@Table
+export class ProjectPagination extends Model<ProjectPagination> {
+  @ApiProperty({
+    type: String,
+    example: '南京项目',
+    description: '搜索名字',
+  })
+  @Column
+  readonly name: string;
 
-  @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
-
-  @Column({ default: true })
-  isActive: boolean;
+  @ApiProperty({
+    type: String,
+    example: '1',
+    description: '第几页',
+  })
+  @Column
+  readonly pageNum: number;
+  @ApiProperty({
+    type: String,
+    example: '10',
+    description: '每页多少条数据',
+  })
+  @Column
+  readonly pageSize?: number;
 }

@@ -1,13 +1,20 @@
 import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiProperty,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ProjectPagination } from 'src/interface/project.interface';
 import { Project } from './entities/project.entity';
 import { ProjectService } from './project.service';
 
 @Controller('project')
 @ApiTags('项目模块')
-@UseGuards(AuthGuard('jwt'))
-@ApiBearerAuth('jwt')
+// @UseGuards(AuthGuard('jwt'))
+// @ApiBearerAuth('jwt')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
@@ -34,11 +41,15 @@ export class ProjectController {
   async updateProject(@Param('id') id: string, @Body() project: Project) {
     return await this.projectService.updateProject(id, project);
   }
-  @Post('update/:name')
+  @Post('search')
   @ApiOperation({
     summary: '查找项目',
   })
-  async findOneProject(@Param('name') name: string) {
-    return await this.projectService.findOneProject(name);
+  async searcgNameProject(@Body() body: ProjectPagination) {
+    return await this.projectService.searcgNameProject(
+      body.pageNum,
+      body.pageSize,
+      body.name,
+    );
   }
 }

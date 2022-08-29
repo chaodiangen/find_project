@@ -96,17 +96,22 @@ export class ProjectService {
    * @param project
    * @returns
    */
-  async findOneProject(name: string) {
+  async searcgNameProject(pageNum: number, pageSize: number, name: string) {
+    console.log(pageNum, pageSize, name);
     try {
-      const data = await this.projectModel.findAll({
+      const { count, rows } = await this.projectModel.findAndCountAll({
+        offset: Number(pageNum) - 1, // 查询的起始下标
+        limit: Number(pageSize), // 查询的条数
         where: {
           name,
         },
       });
-      console.log(data);
       return (this.response = {
         code: 0,
-        data,
+        data: {
+          data: rows,
+          tottal: count,
+        },
       });
     } catch (error) {
       return (this.response = {
