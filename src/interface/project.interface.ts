@@ -9,7 +9,7 @@ export class ProjectPagination extends Model<ProjectPagination> {
     description: '搜索名字',
   })
   @Column
-  readonly name: string;
+  readonly name?: string;
 
   @ApiProperty({
     type: String,

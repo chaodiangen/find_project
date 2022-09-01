@@ -14,7 +14,7 @@ const logger = new Logger('user.service');
 export class AuthService {
   private response: IResponse;
   private pointer = 0;
-  private catches = {};
+  private catches = '';
   constructor(
     @InjectModel(User)
     private readonly userModel: typeof User,
@@ -26,9 +26,16 @@ export class AuthService {
    * 登录验证
    * @param user
    */
-  private async validateUser(user: User) {
+  private async validateUser(user) {
     const phone: string = user.phone;
     const password: string = user.password;
+    const captcha: string = user.captcha;
+    if (captcha.toLocaleLowerCase() !== this.catches) {
+      return (this.response = {
+        code: 3,
+        data: '验证码错误',
+      });
+    }
     return await this.userService
       .findOneByPhone(phone)
       .then((res) => {
@@ -43,6 +50,7 @@ export class AuthService {
       })
       .then((dbUser: User) => {
         const pass = encrypt(password, dbUser.salt);
+        // 验证码
         if (pass === dbUser.password) {
           return (this.response = {
             code: 0,
@@ -71,7 +79,7 @@ export class AuthService {
    * @param user
    * @returns
    */
-  async login(user: User) {
+  async login(user) {
     return await this.validateUser(user)
       .then((res: IResponse) => {
         if (res.code !== 0) {
@@ -148,36 +156,42 @@ export class AuthService {
    * @returns
    */
 
-  async updateUser(user: User) {
+  async updateUser(user) {
+    const password: string = user.oldPassword;
     const phone: string = user.phone;
-    return await this.userService.findOneByPhone(phone).then((dbUser: User) => {
-      if (dbUser) {
-        dbUser.update({
-          ...user,
-        });
-        return (this.response = {
-          code: 0,
-          data: '修改成功',
-        });
-      } else {
-        return (this.response = {
-          code: 4,
-          data: '用户信息修改失败',
-        });
-      }
-    });
+    const data = await this.verificationByPhone(phone, password);
+    if (data.code === 4) {
+      return (this.response = {
+        code: 4,
+        data: '用户信息修改失败',
+      });
+    }
+    // return await this.userService.findOneByPhone(phone).then((dbUser: User) => {
+    //   if (dbUser) {
+    //     dbUser.update({
+    //       ...user,
+    //     });
+    //     return (this.response = {
+    //       code: 0,
+    //       data: '修改成功',
+    //     });
+    //   } else {
+    //     return (this.response = {
+    //       code: 4,
+    //       data: '用户信息修改失败',
+    //     });
+    //   }
+    // });
   }
   /**
    * 获取验证码
    * @param id
    * @returns
    */
-  async createCaptcha(id?: number) {
+  async createCaptcha() {
     const c = svgCaptcha.create();
-    if (id !== -1) {
-      delete this.catches[id];
-    }
-    this.catches[this.pointer] = c.text;
+    this.catches = c.text.toLocaleLowerCase();
+    console.log(this.catches);
     return (this.response = {
       code: 0,
       data: {
@@ -186,17 +200,52 @@ export class AuthService {
       },
     });
   }
+
   /**
    * 验证验证码
    * @param captcha
    * @param id
    * @returns
    */
-
-  async verification(captcha: string, id: number) {
+  async verification(captcha: string) {
     return (this.response =
-      this.catches[id] === captcha
+      this.catches === captcha
         ? { code: 0, data: '验证通过' }
         : { code: 5, data: '验证码错误' });
+  }
+
+  /**
+   *
+   * @param user 手机号登录
+   * @returns
+   */
+  async verificationByPhone(phone, password) {
+    return await this.userService
+      .findOneByPhone(phone)
+      .then((res) => {
+        if (!res) {
+          this.response = {
+            code: 3,
+            data: '用户尚未注册',
+          };
+          throw this.response;
+        }
+        return res;
+      })
+      .then((dbUser: User) => {
+        const pass = encrypt(password, dbUser.salt);
+        // 验证码
+        if (pass === dbUser.password) {
+          return dbUser;
+        } else {
+          return { code: 1 };
+        }
+      })
+      .catch(() => {
+        return (this.response = {
+          code: 4,
+          data: '用户信息获取失败',
+        });
+      });
   }
 }

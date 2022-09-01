@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { IResponse } from 'src/interface/response.interface';
+import { UserService } from 'src/modules/user/user.service';
 import { Project } from './entities/project.entity';
 
 const logger = new Logger('project.service');
@@ -8,23 +9,25 @@ const logger = new Logger('project.service');
 export class ProjectService {
   private response: IResponse;
   constructor(
-    @InjectModel(Project) private readonly projectModel: typeof Project,
+    @InjectModel(Project) private readonly projectModel: typeof Project, // private readonly userService: UserService,
   ) {}
+
   /**
    * 创建项目
    * @param project
    */
   async createProject(project: Project) {
     try {
-      const data = await this.projectModel.create({
-        ...project,
-      });
-      return (this.response = {
-        code: 0,
-        data: {
-          projectId: data.id,
-        },
-      });
+      // const data = await this.projectModel.create({
+      //   ...project,
+      //   status: 0,
+      // });
+      // return (this.response = {
+      //   code: 0,
+      //   data: {
+      //     projectId: data.id,
+      //   },
+      // });
     } catch (error) {
       logger.log(error);
       return (this.response = {
@@ -119,5 +122,10 @@ export class ProjectService {
         data: '查找失败',
       });
     }
+  }
+  async searcgAllProject(userId, pageNum, pageSize) {
+    try {
+    } catch (error) {}
+    return 1;
   }
 }

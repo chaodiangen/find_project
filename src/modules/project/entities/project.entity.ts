@@ -10,7 +10,6 @@ export class Project extends Model<Project> {
   })
   @Column
   readonly name: string;
-
   @ApiProperty({
     type: String,
     example: '我是项目简介',
@@ -20,9 +19,24 @@ export class Project extends Model<Project> {
   readonly description: string;
   @ApiProperty({
     type: String,
-    example: '1',
-    description: '创建者',
+    example: '项目地址',
+    description: '项目地址',
+  })
+  @Column
+  readonly address: string;
+  @Column
+  readonly projectId: string;
+  @ApiProperty({
+    type: String,
+    example: 1,
+    description: '选择项目负责人',
   })
   @Column
   readonly userId?: string;
+  // 0 暂未开始 1  开始中 2 延期 3 结束
+  @Column
+  readonly status: number;
+  // 项目经理
+  @Column
+  identity: string;
 }

@@ -36,6 +36,7 @@ export class UserService {
    * @param id
    */
   async remove(id: string): Promise<void> {
+    // 只有管理员才可以删除
     const user = await this.findOneById(id);
     await user.destroy();
   }

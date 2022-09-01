@@ -7,7 +7,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { login, updateUser } from 'src/interface/user.interface';
 import { User } from 'src/modules/user/entities/user.entity';
+import { UppercaseAndLowercasePipe } from 'src/utils/uppercase-and-lowercase.pipe';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -18,7 +20,7 @@ export class AuthController {
   @ApiOperation({
     summary: '用户登录',
   })
-  public async login(@Body() userDto: User) {
+  public async login(@Body() userDto: login) {
     return this.authService.login(userDto);
   }
 
@@ -34,22 +36,24 @@ export class AuthController {
   @ApiOperation({
     summary: '用户修改接口',
   })
-  async updateUser(@Body() user: User) {
+  async updateUser(@Body() user: updateUser) {
     return await this.authService.updateUser(user);
   }
-  @Get('captcha/:id')
+  @Get('captcha')
   @ApiOperation({
     summary: '获取验证码',
   })
-  async createCaptcha(@Param('id', ParseIntPipe) id: number) {
-    return await this.authService.createCaptcha(id);
+  async createCaptcha() {
+    return await this.authService.createCaptcha();
   }
 
-  @Post('verify')
+  @Get('verify/:captcha')
   @ApiOperation({
     summary: '验证取验证码',
   })
-  async verification(@Body() captcha: { captcha: string; id: number }) {
-    return await this.authService.verification(captcha.captcha, captcha.id);
+  async verification(
+    @Param('captcha', UppercaseAndLowercasePipe) captcha: string,
+  ) {
+    return await this.authService.verification(captcha);
   }
 }
