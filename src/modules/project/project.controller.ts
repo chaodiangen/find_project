@@ -3,26 +3,20 @@ import {
   Controller,
   Get,
   Param,
-  ParseIntPipe,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiProperty,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ProjectPagination } from 'src/interface/project.interface';
 import { Project } from './entities/project.entity';
 import { ProjectService } from './project.service';
 
 @Controller('project')
 @ApiTags('项目模块')
-// @UseGuards(AuthGuard('jwt'))
-// @ApiBearerAuth('jwt')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth('jwt')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
@@ -42,34 +36,24 @@ export class ProjectController {
     return await this.projectService.deleteProject(projectId);
   }
 
-  @Post('find/:id')
+  @Get('update/:id')
   @ApiOperation({
     summary: '修改项目',
   })
   async updateProject(@Param('id') id: string, @Body() project: Project) {
     return await this.projectService.updateProject(id, project);
   }
-  @Post('search')
+
+  @Post('all')
   @ApiOperation({
     summary: '查找项目',
   })
-  async searchNameProject(@Body() body: ProjectPagination) {
-    return await this.projectService.searchNameProject(
+  async searchAllProject(@Body() body: ProjectPagination, @Req() request) {
+    return await this.projectService.searchAllProject(
       body.pageNum,
       body.pageSize,
       body.name,
-    );
-  }
-
-  @Get('project')
-  @ApiOperation({
-    summary: '查找所有项目',
-  })
-  async searcgAllProject(userId: string, @Body() body: ProjectPagination) {
-    return await this.projectService.searcgAllProject(
-      userId,
-      body.pageNum,
-      body.pageSize,
+      request,
     );
   }
 }

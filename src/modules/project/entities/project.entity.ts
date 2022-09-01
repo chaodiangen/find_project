@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Model, Table } from 'sequelize-typescript';
 
-@Table
+@Table({
+  tableName: 'projects',
+})
 export class Project extends Model<Project> {
   @ApiProperty({
     type: String,
@@ -24,8 +26,6 @@ export class Project extends Model<Project> {
   })
   @Column
   readonly address: string;
-  @Column
-  readonly projectId: string;
   @ApiProperty({
     type: String,
     example: 1,

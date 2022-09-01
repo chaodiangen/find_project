@@ -59,6 +59,7 @@ export class AuthService {
           avatar: res.data.dataValues.avatar,
           phone: res.data.dataValues.phone,
         };
+        user.id = res.data.dataValues.id;
         return this.createToken(user).then((res) => {
           this.response = {
             code: 0,

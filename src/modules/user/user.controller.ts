@@ -17,10 +17,10 @@ export class UserController {
     return await this.userService.findAll();
   }
 
-  //   装饰器
-  @Get('hello')
-  @Role('admin')
-  hello() {
-    return '123';
-  }
+  //   //   装饰器
+  //   @Get('hello')
+  //   @Role('admin')
+  //   hello() {
+  //     return '123';
+  //   }
 }

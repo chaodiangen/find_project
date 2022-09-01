@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { IResponse } from 'src/interface/response.interface';
 import { UserService } from 'src/modules/user/user.service';
 import { Project } from './entities/project.entity';
@@ -9,6 +10,7 @@ const logger = new Logger('project.service');
 export class ProjectService {
   private response: IResponse;
   constructor(
+    private readonly userService: UserService,
     @InjectModel(Project) private readonly projectModel: typeof Project, // private readonly userService: UserService,
   ) {}
 
@@ -18,16 +20,26 @@ export class ProjectService {
    */
   async createProject(project: Project) {
     try {
-      // const data = await this.projectModel.create({
-      //   ...project,
-      //   status: 0,
-      // });
-      // return (this.response = {
-      //   code: 0,
-      //   data: {
-      //     projectId: data.id,
-      //   },
-      // });
+      let identity = '';
+      const user = await this.userService.findOneById(parseInt(project.userId));
+      if (user.role === 1) {
+        identity = '管理员';
+      } else if (user.role === 2) {
+        identity = '项目经理';
+      } else {
+        identity = '普通用户';
+      }
+      const projectData = await this.projectModel.create({
+        ...project,
+        status: 0,
+        identity,
+      });
+      return (this.response = {
+        code: 0,
+        data: {
+          projectId: projectData.id,
+        },
+      });
     } catch (error) {
       logger.log(error);
       return (this.response = {
@@ -99,13 +111,21 @@ export class ProjectService {
    * @param project
    * @returns
    */
-  async searchNameProject(pageNum: number, pageSize: number, name: string) {
+  async searchAllProject(
+    pageNum: number,
+    pageSize: number,
+    name: string,
+    request,
+  ) {
     try {
+      const _id = request.user.userId;
       const { count, rows } = await this.projectModel.findAndCountAll({
         offset: Number(pageNum) - 1, // 查询的起始下标
         limit: Number(pageSize), // 查询的条数
         where: {
-          name,
+          name: {
+            [Sequelize.Op.like]: '%' + 'asa' + '%',
+          },
         },
       });
       return (this.response = {
@@ -121,10 +141,5 @@ export class ProjectService {
         data: '查找失败',
       });
     }
-  }
-  async searcgAllProject(userId, pageNum, pageSize) {
-    try {
-    } catch (error) {}
-    return 1;
   }
 }
