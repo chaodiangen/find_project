@@ -30,48 +30,15 @@ export class AuthService {
     const phone: string = user.phone;
     const password: string = user.password;
     const captcha: string = user.captcha;
-    if (captcha.toLocaleLowerCase() !== this.catches) {
+    if (captcha.toLocaleLowerCase() !== this.catches || captcha === '') {
       return (this.response = {
         code: 3,
         data: '验证码错误',
       });
+    } else {
+      const data = await this.verificationByPhone(phone, password);
+      return data;
     }
-    return await this.userService
-      .findOneByPhone(phone)
-      .then((res) => {
-        if (!res) {
-          this.response = {
-            code: 3,
-            data: '用户尚未注册',
-          };
-          throw this.response;
-        }
-        return res;
-      })
-      .then((dbUser: User) => {
-        const pass = encrypt(password, dbUser.salt);
-        // 验证码
-        if (pass === dbUser.password) {
-          return (this.response = {
-            code: 0,
-            data: {
-              ...dbUser,
-            },
-          });
-        } else {
-          this.response = {
-            code: 4,
-            data: '登录失败',
-          };
-          throw this.response;
-        }
-      })
-      .catch(() => {
-        throw (this.response = {
-          code: 4,
-          data: '请输入正确信息',
-        });
-      });
   }
 
   /**
@@ -160,33 +127,30 @@ export class AuthService {
     const password: string = user.oldPassword;
     const phone: string = user.phone;
     const data = await this.verificationByPhone(phone, password);
-    if (data.code === 4) {
-      return (this.response = {
-        code: 4,
-        data: '用户信息修改失败',
-      });
+    if (data.code === 0) {
+      try {
+        delete user.oldPassword;
+        data.data.update({
+          ...user,
+        });
+        return (this.response = {
+          code: 0,
+          data: '修改成功',
+        });
+      } catch (error) {
+        return (this.response = {
+          code: 2,
+          data: '用户信息修改失败',
+        });
+      }
+    } else {
+      return data;
     }
-    // return await this.userService.findOneByPhone(phone).then((dbUser: User) => {
-    //   if (dbUser) {
-    //     dbUser.update({
-    //       ...user,
-    //     });
-    //     return (this.response = {
-    //       code: 0,
-    //       data: '修改成功',
-    //     });
-    //   } else {
-    //     return (this.response = {
-    //       code: 4,
-    //       data: '用户信息修改失败',
-    //     });
-    //   }
-    // });
   }
+
   /**
-   * 获取验证码
-   * @param id
-   * @returns
+   *
+   * @returns 获取验证码
    */
   async createCaptcha() {
     const c = svgCaptcha.create();
@@ -219,7 +183,7 @@ export class AuthService {
    * @param user 手机号登录
    * @returns
    */
-  async verificationByPhone(phone, password) {
+  async verificationByPhone(phone, password): Promise<any> {
     return await this.userService
       .findOneByPhone(phone)
       .then((res) => {
@@ -234,11 +198,16 @@ export class AuthService {
       })
       .then((dbUser: User) => {
         const pass = encrypt(password, dbUser.salt);
-        // 验证码
         if (pass === dbUser.password) {
-          return dbUser;
+          return (this.response = {
+            code: 0,
+            data: dbUser,
+          });
         } else {
-          return { code: 1 };
+          return (this.response = {
+            code: 1,
+            data: '密码输入错误',
+          });
         }
       })
       .catch(() => {
@@ -247,5 +216,29 @@ export class AuthService {
           data: '用户信息获取失败',
         });
       });
+  }
+
+  async deleteUser(id: number) {
+    // 判断用户角色
+    try {
+      const user = await this.userService.findOneById(id);
+      if (user.role !== 1) {
+        await this.userService.remove(id);
+        return (this.response = {
+          code: 0,
+          data: '删除成功',
+        });
+      } else {
+        return (this.response = {
+          code: 1,
+          data: '删除失败',
+        });
+      }
+    } catch (error) {
+      return (this.response = {
+        code: 4,
+        data: '获取信息失败',
+      });
+    }
   }
 }

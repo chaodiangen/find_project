@@ -23,8 +23,8 @@ export class UserService {
    * @param id
    * @returns
    */
-  async findOneById(id: string): Promise<User> {
-    return this.userModel.findOne({
+  async findOneById(id: number): Promise<User> {
+    return await this.userModel.findOne({
       where: {
         id,
       },
@@ -35,7 +35,7 @@ export class UserService {
    * 删除用户
    * @param id
    */
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     // 只有管理员才可以删除
     const user = await this.findOneById(id);
     await user.destroy();

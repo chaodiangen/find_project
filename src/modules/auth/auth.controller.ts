@@ -56,4 +56,11 @@ export class AuthController {
   ) {
     return await this.authService.verification(captcha);
   }
+  @Get('delete/:id')
+  @ApiOperation({
+    summary: '删除用户',
+  })
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return await this.authService.deleteUser(id);
+  }
 }

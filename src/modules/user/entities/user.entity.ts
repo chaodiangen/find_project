@@ -43,7 +43,7 @@ export class User extends Model<User> {
     description: '用户角色 1 管理员 2 vip 3 普通用户',
   })
   @Column
-  readonly role: string;
+  readonly role: number;
 
   @Column
   readonly salt?: string;
