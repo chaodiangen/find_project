@@ -4,6 +4,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { IResponse } from 'src/interface/response.interface';
 import { UserService } from 'src/modules/user/user.service';
 import { Project } from './entities/project.entity';
+import { Op } from 'sequelize';
 
 const logger = new Logger('project.service');
 @Injectable()
@@ -124,7 +125,10 @@ export class ProjectService {
         limit: Number(pageSize), // 查询的条数
         where: {
           name: {
-            [Sequelize.Op.like]: '%' + 'asa' + '%',
+            [Op.like]: '%' + name + '%',
+          },
+          userId: {
+            [Op.eq]: _id,
           },
         },
       });
