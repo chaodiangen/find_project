@@ -7,9 +7,6 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProjectModule } from './modules/project/project.module';
 import { EmailModule } from './modules/email/email.module';
-import { MailerModule } from '@nestjs-modules/mailer';
-import EmailConfig from './utils/email.config';
-
 @Module({
   imports: [
     Log4jsModule.forRoot(),
@@ -18,9 +15,6 @@ import EmailConfig from './utils/email.config';
     AuthModule,
     ProjectModule,
     EmailModule,
-    MailerModule.forRoot({
-      ...EmailConfig,
-    }),
   ],
   controllers: [AppController],
   providers: [AppService],

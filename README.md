@@ -31,13 +31,13 @@
 ```bash
 $ npm install
 ```
-
-# jwt   用户验证
-# sequelize ORM
-# mysql2 数据库
-# swagger 文档
-# crypto 密码加密
-# log4js 日志
+### 项目中使用的插件
+- jwt   用户验证
+- sequelize ORM
+- mysql2 数据库
+- swagger 文档
+- crypto 密码加密
+- log4js 日志
 # svg-captcha 验证码
 
 ## Running the app
