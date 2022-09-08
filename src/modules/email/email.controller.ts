@@ -1,9 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiProperty,
+  ApiTags,
+} from '@nestjs/swagger';
 import { EmailService } from './email.service';
-
+import { AuthGuard } from '@nestjs/passport';
 @ApiTags('发送邮件')
 @Controller('email')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth('jwt')
 export class EmailController {
   constructor(private readonly mailerService: EmailService) {}
   @Get('send/:emial')
