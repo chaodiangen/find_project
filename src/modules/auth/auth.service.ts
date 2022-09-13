@@ -75,6 +75,7 @@ export class AuthService {
         return err;
       });
   }
+
   /**
    * 创建token
    * @param user
@@ -86,6 +87,7 @@ export class AuthService {
       access_token: this.jwtService.sign(user),
     };
   }
+
   /**
    * 注册
    * @param user
@@ -118,12 +120,12 @@ export class AuthService {
       }
     }
   }
+
   /**
    * 输入当前密码 然后进行修改
    * @param user 修改用户密码
    * @returns
    */
-
   async updateUser(user) {
     const password: string = user.oldPassword;
     const phone: string = user.phone;
@@ -219,6 +221,11 @@ export class AuthService {
       });
   }
 
+  /**
+   * 删除用户
+   * @param id
+   * @returns
+   */
   async deleteUser(id: number) {
     // 判断用户角色
     try {
@@ -241,5 +248,16 @@ export class AuthService {
         data: '获取信息失败',
       });
     }
+  }
+
+  /**
+   * 上传文件
+   * @param files
+   * @param body
+   * @returns
+   */
+  async uploads(file, body) {
+    // 走入存储数据库方法
+    return 1;
   }
 }
