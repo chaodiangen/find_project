@@ -7,6 +7,7 @@ import { UserService } from 'src/modules/user/user.service';
 import { encrypt } from 'src/utils/encrtiption';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const svgCaptcha = require('svg-captcha');
+import * as fs from 'fs';
 
 const logger = new Logger('user.service');
 
@@ -250,14 +251,47 @@ export class AuthService {
     }
   }
 
+  async delDir(path, name) {
+    let files = [];
+    if (fs.existsSync(path)) {
+      files = fs.readdirSync(path);
+      files.forEach((file, index) => {
+        console.log(file);
+        if (file !== name) {
+          const curPath = path + '/' + file;
+          fs.unlinkSync(curPath); //删除文件
+        }
+      });
+    }
+  }
+
   /**
-   * 上传文件
-   * @param files
-   * @param body
+   * 修改头像
+   * @param file
+   * @param request
    * @returns
    */
-  async uploads(file, body) {
+  async uploads(file, request) {
     // 走入存储数据库方法
-    return 1;
+    try {
+      this.delDir('./data/avatar', file.filename);
+      const userId = request.user.userId;
+      const user = await this.userService.findOneById(userId);
+      await user.update(
+        { avatar: `/static/avatar/${file.filename}` },
+        {
+          where: { id: userId },
+        },
+      );
+      return (this.response = {
+        code: 0,
+        data: '修改成功',
+      });
+    } catch (error) {
+      return (this.response = {
+        code: 4,
+        data: '修改失败',
+      });
+    }
   }
 }

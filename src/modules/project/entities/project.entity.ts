@@ -32,7 +32,7 @@ export class Project extends Model<Project> {
     description: '选择项目负责人',
   })
   @Column
-  readonly userId?: string;
+  readonly userId?: number;
   // 0 暂未开始 1  开始中 2 延期 3 结束
   @Column
   readonly status: number;

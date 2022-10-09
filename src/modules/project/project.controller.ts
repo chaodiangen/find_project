@@ -24,8 +24,8 @@ export class ProjectController {
   @ApiOperation({
     summary: '创建项目',
   })
-  async createProject(@Body() project: Project) {
-    return await this.projectService.createProject(project);
+  async createProject(@Body() project: Project, @Req() request) {
+    return await this.projectService.createProject(project, request);
   }
 
   @Post('delete/:id')

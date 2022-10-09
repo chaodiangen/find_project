@@ -19,10 +19,11 @@ export class ProjectService {
    * 创建项目
    * @param project
    */
-  async createProject(project: Project) {
+  async createProject(project: Project, request) {
     try {
+      const userId = request.user.userId;
       let identity = '';
-      const user = await this.userService.findOneById(parseInt(project.userId));
+      const user = await this.userService.findOneById(userId);
       if (user.role === 1) {
         identity = '管理员';
       } else if (user.role === 2) {
@@ -32,6 +33,7 @@ export class ProjectService {
       }
       const projectData = await this.projectModel.create({
         ...project,
+        userId,
         status: 0,
         identity,
       });
