@@ -23,8 +23,6 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 @ApiTags('登录')
-@UseGuards(AuthGuard('jwt'))
-@ApiBearerAuth('jwt')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('login')
@@ -44,6 +42,8 @@ export class AuthController {
   }
 
   @Post('update')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('jwt')
   @ApiOperation({
     summary: '用户修改接口',
   })
@@ -70,6 +70,8 @@ export class AuthController {
   }
 
   @Get('delete/:id')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('jwt')
   @ApiOperation({
     summary: '删除用户',
   })
@@ -87,6 +89,8 @@ export class AuthController {
    */
 
   @Post('upload')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('jwt')
   @ApiOperation({
     summary: '修改头像',
   })

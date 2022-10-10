@@ -26,16 +26,13 @@ import { JwtStrategy } from './jwt.strategy';
     SequelizeModule.forFeature([User]),
     JwtModule.register({
       secret: jwtConstants.secret,
+      signOptions: { expiresIn: '8h' }, // token 过期时效
     }),
   ],
 })
 export class AuthModule implements NestModule {
   // 使用中间件进行密码加密
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(HashPasswordMiddleware)
-      .forRoutes('auth/register')
-      .apply(HashPasswordMiddleware)
-      .forRoutes('auth/update');
+    consumer.apply(HashPasswordMiddleware).forRoutes('auth/register');
   }
 }
