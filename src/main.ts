@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { logger } from './middleware/logger.middleware';
+import * as express from 'express';
 
 const listenPort = 3000;
 const bootstrap = async () => {
@@ -25,6 +26,8 @@ const bootstrap = async () => {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   //  使用log4框架打印日志
   app.use(logger);
 

@@ -1,12 +1,13 @@
 import * as path from 'path';
-const baseLogPath = path.resolve(__dirname, '../../../logs'); //日志要写入哪个目录
+const baseLogPath = path.resolve(__dirname, '../../logs'); //日志要写入哪个目录
+console.log(baseLogPath);
 const log4jsConfig = {
   appenders: {
     console: {
       type: 'console', //打印到控制台
     },
     access: {
-      type: 'dataFile', //会写入文件，并且按照日期分类
+      type: 'dateFile', //会写入文件，并且按照日期分类
       filename: `${baseLogPath}/access/access.log`, //日志文件名，会命名为：access.当前时间.log
       alwaysIncludePattern: true,
       pattern: 'yyyyMMdd', //时间格式
