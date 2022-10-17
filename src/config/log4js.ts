@@ -1,6 +1,5 @@
 import * as path from 'path';
 const baseLogPath = path.resolve(__dirname, '../../logs'); //日志要写入哪个目录
-console.log(baseLogPath);
 const log4jsConfig = {
   appenders: {
     console: {
@@ -43,6 +42,7 @@ const log4jsConfig = {
       //日志文件按日期切割
       pattern: 'yyyyMMdd',
       daysToKeep: 60,
+      backups: 20,
       numBackups: 3,
       keepFileExt: true,
     },

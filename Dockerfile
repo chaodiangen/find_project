@@ -1,17 +1,13 @@
-# 基础镜像
-FROM registry-vpc.cn-shanghai.aliyuncs.com/chuxingpay/node14-pulsar:v0.0.2
+FROM node:lts-alpine
 
-# copy 文件或目录到镜像
-COPY ./ /root/app
+WORKDIR /app
 
-# 默认工作目录
-WORKDIR /root/app
+ENV NODE_ENV development
+COPY package.json yarn.lock ./
+RUN yarn
 
-# 在镜像中执行命令，安装依赖包。RUN 后面执行的命令结果会影响到构建后的镜像
-RUN npm i --registry=https://registry.npmmirror.com
+COPY . .
 
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+EXPOSE 3000
 
-# 由镜像启动container(实例)时执行的指令
-CMD ["npm", "run", "start"]
+CMD [ "yarn", "start:dev" ]
