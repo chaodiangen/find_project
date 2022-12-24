@@ -14,10 +14,10 @@ for (const key in models) {
   imports: [
     SequelizeModule.forRoot({
       dialect: 'mysql',
-      host: '47.100.70.129',
+      host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '!@#123456',
+      password: '123456',
       database: 'nest_export',
       models: allModels,
       pool: {

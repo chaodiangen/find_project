@@ -66,7 +66,7 @@ export class AuthService {
             code: 0,
             data: {
               token: res.access_token,
-              data: result,
+              ...result
             },
           };
           return this.response;
