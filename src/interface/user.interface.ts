@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Model } from 'sequelize-typescript';
+import { Column, Model, Table } from 'sequelize-typescript';
 export class login extends Model {
   @ApiProperty({
     type: String,
@@ -53,4 +53,28 @@ export class updateUser extends Model {
   })
   @Column
   readonly password: string;
+}
+@Table
+export class userPagination extends Model{
+  @ApiProperty({
+    type: String,
+    example: '张三',
+    description: '搜索名字',
+  })
+  @Column
+  readonly name?: string;
+  @ApiProperty({
+    type: Number,
+    example: 1,
+    description: '第几页',
+  })
+  @Column
+  readonly pageNum: number;
+  @ApiProperty({
+    type: Number,
+    example: 10,
+    description: '每页多少条数据',
+  })
+  @Column
+  readonly pageSize?: number;
 }

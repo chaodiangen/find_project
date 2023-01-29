@@ -44,7 +44,7 @@ export class ProjectController {
     return await this.projectService.updateProject(id, project);
   }
 
-  @Post('all')
+  @Post('list')
   @ApiOperation({
     summary: '查找项目',
   })

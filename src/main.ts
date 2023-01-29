@@ -24,13 +24,12 @@ const bootstrap = async () => {
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('swagger', app, document);
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   //  使用log4框架打印日志
   app.use(logger);
-
   // 全局路由前缀
   // app.setGlobalPrefix('api');
 

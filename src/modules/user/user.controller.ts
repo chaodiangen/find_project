@@ -1,10 +1,9 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Role } from '../role/role.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-
+import { userPagination } from 'src/interface/user.interface';
 @Controller('user')
 @ApiTags('用户模块')
 @UseGuards(AuthGuard('jwt'))
@@ -12,15 +11,12 @@ import { AuthGuard } from '@nestjs/passport';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('all')
-  async getFindAll() {
-    return await this.userService.findAll();
+  @Post('list')
+  async getFindAll(@Body() body: userPagination) {
+    return await this.userService.findAll(
+      body.pageNum,
+      body.pageSize,
+      body.name,
+    );
   }
-
-  //   //   装饰器
-  //   @Get('hello')
-  //   @Role('admin')
-  //   hello() {
-  //     return '123';
-  //   }
 }
