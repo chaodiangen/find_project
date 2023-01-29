@@ -47,6 +47,7 @@ export class UserService {
           phone: item.phone,
           avatar: item.avatar,
           role: item.role,
+          enable: 1,
           createdAt: item.createdAt,
           updatedAt: item.updatedAt,
         });
@@ -54,7 +55,7 @@ export class UserService {
       return (this.response = {
         code: 0,
         data: {
-          data: newList,
+          list: newList,
           total: total,
         },
       });
