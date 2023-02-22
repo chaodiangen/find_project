@@ -7,6 +7,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProjectModule } from './modules/project/project.module';
 import { EmailModule } from './modules/email/email.module';
+import { MenuModule } from './modules/menu/menu.module';
 @Module({
   imports: [
     Log4jsModule.forRoot(),
@@ -15,6 +16,7 @@ import { EmailModule } from './modules/email/email.module';
     AuthModule,
     ProjectModule,
     EmailModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [AppService],
