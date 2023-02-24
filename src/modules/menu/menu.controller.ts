@@ -33,4 +33,19 @@ export class MenuController {
   async searchAllMenu(@Req() request) {
     return await this.menuService.searchAllMenu(request);
   }
+  @Post('update')
+  @ApiOperation({
+    summary: '修改菜单',
+  })
+  async updateMenu(@Body() menu: Menu, @Req() request) {
+    return await this.menuService.updatedMenu(menu, request);
+  }
+
+  @Get('delete/:id')
+  @ApiOperation({
+    summary: '删除菜单',
+  })
+  async deleteMenu(@Param('id') id: number, @Req() request) {
+    return await this.menuService.deleteMenu(id, request);
+  }
 }

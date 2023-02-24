@@ -55,28 +55,31 @@ export class MenuService {
       const user = await this.userService.findOneById(userId);
       if (user.role === 1) {
         const menuList = await this.menuModel.findAll();
-        const newArr = menuList.map((item) => {
-          return {
-            item,
-            children: '',
-          };
-        });
-        const dataInfo = {};
-        newArr.forEach((item, index) => {
-          const { children } = item;
-          if (!dataInfo[children]) {
-            dataInfo[children] = {
-              children,
-              inventoryData: [],
-            };
+        const newArr = [];
+        menuList.forEach((item, index) => {
+          if (item.type === 1) {
+            newArr.push({
+              id: item.id,
+              name: item.name,
+              icon: item.icon,
+              sort: item.sort,
+              type: item.type,
+              url: item.url,
+              createdAt: item.createdAt,
+              updatedAt: item.updatedAt,
+              children: [],
+            });
+            menuList.forEach((i) => {
+              if (item.id === i.parent_id) {
+                newArr[index].children.push(i);
+              }
+            });
           }
-          dataInfo[children].inventoryData.push(item);
         });
-        const list = Object.values(dataInfo); // list 转换成功的数据
         return (this.response = {
           code: 0,
           data: {
-            data: list,
+            list: newArr,
           },
         });
       } else {
@@ -92,5 +95,75 @@ export class MenuService {
         data: '查找失败',
       });
     }
+  }
+  /**
+   * 修改菜单
+   * @param body
+   * @param request
+   * @returns
+   */
+  async updatedMenu(body, request) {
+    try {
+      const userId = request.user.userId;
+      const user = await this.userService.findOneById(userId);
+      if (user.role === 1) {
+        const data = await this.findOneById(body.id);
+        await data.update(body);
+        return (this.response = {
+          code: 0,
+          data: '修改成功',
+        });
+      } else {
+        return (this.response = {
+          code: 1,
+          data: '暂无权限修改',
+        });
+      }
+    } catch (error) {
+      logger.log(error);
+      return (this.response = {
+        code: 1,
+        data: '修改失败',
+      });
+    }
+  }
+
+  async deleteMenu(id, request) {
+    try {
+      const userId = request.user.userId;
+      const user = await this.userService.findOneById(userId);
+      if (user.role === 1) {
+        const data = await this.findOneById(id);
+        await data.destroy();
+        return (this.response = {
+          code: 0,
+          data: '删除成功',
+        });
+      } else {
+        return (this.response = {
+          code: 1,
+          data: '暂无权限删除',
+        });
+      }
+    } catch (error) {
+      logger.log(error);
+      return (this.response = {
+        code: 1,
+        data: '删除失败',
+      });
+    }
+  }
+
+  /**
+   * 查找菜单
+   * @param id
+   * @returns
+   */
+  findOneById(id: number) {
+    return this.menuModel.findOne({
+      where: {
+        id,
+      },
+    });
   }
 }

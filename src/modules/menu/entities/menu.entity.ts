@@ -18,7 +18,7 @@ export class Menu extends Model<Menu> {
     description: '图标',
   })
   @Column
-  readonly icon: string;
+  readonly icon?: string;
   @ApiProperty({
     type: Number,
     example: '1',
