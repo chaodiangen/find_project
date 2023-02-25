@@ -20,6 +20,13 @@ export class Menu extends Model<Menu> {
   @Column
   readonly icon?: string;
   @ApiProperty({
+    type: String,
+    example: '',
+    description: '权限',
+  })
+  @Column
+  readonly permission?: string;
+  @ApiProperty({
     type: Number,
     example: '1',
     description: '排序',

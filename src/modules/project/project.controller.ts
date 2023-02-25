@@ -2,8 +2,8 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -28,20 +28,20 @@ export class ProjectController {
     return await this.projectService.createProject(project, request);
   }
 
-  @Post('delete/:id')
+  @Get('delete')
   @ApiOperation({
     summary: '删除项目',
   })
-  async deleteProject(@Param('id') projectId: string) {
+  async deleteProject(@Query('id') projectId: string) {
     return await this.projectService.deleteProject(projectId);
   }
 
-  @Get('update/:id')
+  @Get('update')
   @ApiOperation({
     summary: '修改项目',
   })
-  async updateProject(@Param('id') id: string, @Body() project: Project) {
-    return await this.projectService.updateProject(id, project);
+  async updateProject(@Body() project: Project) {
+    return await this.projectService.updateProject(project);
   }
 
   @Post('list')

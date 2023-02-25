@@ -8,6 +8,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProjectModule } from './modules/project/project.module';
 import { EmailModule } from './modules/email/email.module';
 import { MenuModule } from './modules/menu/menu.module';
+import { DepartmentModule } from './modules/department/department.module';
+import { RoleModule } from './modules/role/role.module';
+import { GoodsModule } from './modules/goods/goods.module';
 @Module({
   imports: [
     Log4jsModule.forRoot(),
@@ -17,8 +20,11 @@ import { MenuModule } from './modules/menu/menu.module';
     ProjectModule,
     EmailModule,
     MenuModule,
+    DepartmentModule,
+    RoleModule,
+    GoodsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,],
 })
 export class AppModule {}

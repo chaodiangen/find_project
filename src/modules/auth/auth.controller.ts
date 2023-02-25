@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  Query
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { login, updateUser } from 'src/interface/user.interface';
@@ -59,23 +60,23 @@ export class AuthController {
     return await this.authService.createCaptcha();
   }
 
-  @Get('verify/:captcha')
+  @Get('verify')
   @ApiOperation({
     summary: '验证取验证码',
   })
   async verification(
-    @Param('captcha', UppercaseAndLowercasePipe) captcha: string,
+    @Query('captcha', UppercaseAndLowercasePipe) captcha: string,
   ) {
     return await this.authService.verification(captcha);
   }
 
-  @Get('delete/:id')
+  @Get('delete')
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('jwt')
   @ApiOperation({
     summary: '删除用户',
   })
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+  async deleteUser(@Query('id', ParseIntPipe) id: number) {
     return await this.authService.deleteUser(id);
   }
   /**

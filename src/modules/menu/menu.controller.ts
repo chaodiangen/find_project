@@ -2,8 +2,8 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -26,11 +26,11 @@ export class MenuController {
     return await this.menuService.createMenu(menu, request);
   }
 
-  @Get('list')
+  @Post('list')
   @ApiOperation({
     summary: '菜单列表',
   })
-  async searchAllMenu(@Req() request) {
+  async searchAllMenu(@Body() body, @Req() request) {
     return await this.menuService.searchAllMenu(request);
   }
   @Post('update')
@@ -41,11 +41,11 @@ export class MenuController {
     return await this.menuService.updatedMenu(menu, request);
   }
 
-  @Get('delete/:id')
+  @Get('delete')
   @ApiOperation({
     summary: '删除菜单',
   })
-  async deleteMenu(@Param('id') id: number, @Req() request) {
+  async deleteMenu(@Query('id') id: number, @Req() request) {
     return await this.menuService.deleteMenu(id, request);
   }
 }

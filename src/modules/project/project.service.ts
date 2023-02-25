@@ -93,8 +93,8 @@ export class ProjectService {
    * @param project 修改值
    * @returns
    */
-  async updateProject(projectId: string, project: Project) {
-    const data = await this.findOneById(projectId);
+  async updateProject( project: Project) {
+    const data = await this.findOneById(project.id);
     try {
       data.update(project);
       return (this.response = {

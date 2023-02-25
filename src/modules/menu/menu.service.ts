@@ -69,13 +69,26 @@ export class MenuService {
               updatedAt: item.updatedAt,
               children: [],
             });
-            menuList.forEach((i) => {
-              if (item.id === i.parent_id) {
-                newArr[index].children.push(i);
+            menuList.forEach((i, k) => {
+              if (i.type === 2 && item.id === i.parent_id) {
+                newArr[index].children.push({
+                  id: i.id,
+                  name: i.name,
+                  icon: i.icon,
+                  sort: i.sort,
+                  type: i.type,
+                  url: i.url,
+                  createdAt: i.createdAt,
+                  updatedAt: i.updatedAt,
+                  children: menuList.filter((y) => {
+                    return y.type === 3 && y.parent_id === i.id;
+                  }),
+                });
               }
             });
           }
         });
+
         return (this.response = {
           code: 0,
           data: {
